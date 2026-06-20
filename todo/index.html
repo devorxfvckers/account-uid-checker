@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="todo-wrapper">
+            <header>
+                <h1>📝 My To-Do List</h1>
+                <p>Stay organized and productive</p>
+            </header>
+
+            <div class="input-section">
+                <div class="input-group">
+                    <input 
+                        type="text" 
+                        id="todoInput" 
+                        placeholder="Add a new task..."
+                        autocomplete="off"
+                    />
+                    <button onclick="addTodo()" class="add-btn">➕ Add</button>
+                </div>
+                <div class="priority-section">
+                    <label>Priority:</label>
+                    <select id="prioritySelect">
+                        <option value="low">🟢 Low</option>
+                        <option value="medium" selected>🟡 Medium</option>
+                        <option value="high">🔴 High</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <button onclick="filterTodos('all')" class="filter-btn active" id="filterAll">All</button>
+                <button onclick="filterTodos('active')" class="filter-btn" id="filterActive">Active</button>
+                <button onclick="filterTodos('completed')" class="filter-btn" id="filterCompleted">Completed</button>
+                <button onclick="clearCompleted()" class="clear-btn">🗑️ Clear Completed</button>
+            </div>
+
+            <div class="stats">
+                <span id="totalTodos">Total: 0</span>
+                <span id="completedTodos">Completed: 0</span>
+                <span id="activeTodos">Active: 0</span>
+            </div>
+
+            <div class="todos-container" id="todosContainer">
+                <p class="empty-message">No tasks yet. Add one to get started! 🚀</p>
+            </div>
+
+            <div class="action-buttons">
+                <button onclick="exportTodos()" class="export-btn">📥 Export</button>
+                <button onclick="importTodos()" class="import-btn">📤 Import</button>
+                <button onclick="resetAll()" class="reset-btn">🔄 Reset All</button>
+            </div>
+        </div>
+    </div>
+
+    <input type="file" id="importFile" accept=".json" style="display: none;" onchange="handleImport()" />
+    <script src="script.js"></script>
+</body>
+</html>
