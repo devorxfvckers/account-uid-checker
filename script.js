@@ -185,19 +185,50 @@ function displayLinkedAccounts() {
         const accountItem = document.createElement('div');
         accountItem.className = 'account-item';
         
-        const statusClass = account.status === 'active' ? 'status-active' : 
-                           account.status === 'inactive' ? 'status-inactive' : 
-                           'status-non-visible';
-        
-        const statusLabel = account.status === 'active' ? '🟢 Active' : 
-                           account.status === 'inactive' ? '🔴 Inactive' : 
-                           '👻 Non-Visible';
+        let statusClass, statusLabel, statusEmoji;
+
+        switch(account.status) {
+            case 'active':
+                statusClass = 'status-active';
+                statusLabel = 'Active';
+                statusEmoji = '🟢';
+                break;
+            case 'inactive':
+                statusClass = 'status-inactive';
+                statusLabel = 'Inactive';
+                statusEmoji = '🔴';
+                break;
+            case 'non-visible':
+                statusClass = 'status-non-visible';
+                statusLabel = 'Non-Visible';
+                statusEmoji = '👻';
+                break;
+            case 'suspended':
+                statusClass = 'status-suspended';
+                statusLabel = 'Suspended';
+                statusEmoji = '⛔';
+                break;
+            case 'disabled':
+                statusClass = 'status-disabled';
+                statusLabel = 'Disabled';
+                statusEmoji = '🚫';
+                break;
+            case 'deleted':
+                statusClass = 'status-deleted';
+                statusLabel = 'Deleted';
+                statusEmoji = '💀';
+                break;
+            default:
+                statusClass = 'status-active';
+                statusLabel = 'Unknown';
+                statusEmoji = '❓';
+        }
 
         accountItem.innerHTML = `
             <div class="info">
                 <div class="platform">${account.platform}</div>
                 <div class="username">${account.accountId}</div>
-                <div class="status-info ${statusClass}">${statusLabel}</div>
+                <div class="status-info ${statusClass}">${statusEmoji} ${statusLabel}</div>
                 <div style="font-size: 0.8em; color: #999;">Linked: ${account.linkedAt}</div>
             </div>
             <button class="remove" onclick="removeAccount(${index})">Remove</button>
