@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Social Profile Checker</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #4267B2, #E1306C);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      width: 350px;
+      text-align: center;
+    }
+    h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+    input, select {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    button {
+      background: #4267B2;
+      color: #fff;
+      border: none;
+      padding: 12px;
+      width: 100%;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 15px;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #365899;
+    }
+    .status {
+      margin-top: 20px;
+      font-weight: bold;
+      color: #444;
+    }
+    .profile-card {
+      margin-top: 20px;
+      padding: 15px;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      background: #fafafa;
+    }
+    .profile-card img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Profile Status Checker</h2>
+    <select id="platform">
+      <option value="facebook">Facebook</option>
+      <option value="instagram">Instagram</option>
+    </select>
+    <input type="text" id="username" placeholder="Enter username">
+    <button onclick="checkStatus()">Check Status</button>
+    <div class="status" id="status">Status will appear here</div>
+    <div class="profile-card" id="profileCard" style="display:none;">
+      <img id="profilePic" src="" alt="Profile Picture">
+      <div id="profileName"></div>
+      <div id="profileActive"></div>
+    </div>
+  </div>
+
+  <script>
+    function checkStatus() {
+      const platform = document.getElementById('platform').value;
+      const user = document.getElementById('username').value;
+
+      // Placeholder logic — replace with API calls
+      document.getElementById('status').innerText = 
+        `Checking ${platform} profile for "${user}"...`;
+
+      // Simulated profile card
+      document.getElementById('profileCard').style.display = 'block';
+      document.getElementById('profilePic').src = 
+        platform === 'facebook' 
+          ? 'https://www.facebook.com/images/fb_icon_325x325.png'
+          : 'https://www.instagram.com/static/images/ico/favicon-200.png/ab6eff3d7f2b.png';
+      document.getElementById('profileName').innerText = user;
+      document.getElementById('profileActive').innerText = "Active status: (API required)";
+    }
+  </script>
+</body>
+</html>
