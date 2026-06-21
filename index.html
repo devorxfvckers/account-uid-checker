@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Account Link & UID Checker</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:linear-gradient(135deg,#4267B2,#E1306C);
+min-height:100vh;
+padding:20px;
+}
+
+.container{
+max-width:1000px;
+margin:auto;
+background:white;
+padding:20px;
+border-radius:15px;
+box-shadow:0 5px 20px rgba(0,0,0,.2);
+}
+
+h1{
+text-align:center;
+margin-bottom:20px;
+}
+
+.form-group{
+margin-bottom:12px;
+}
+
+input,select{
+width:100%;
+padding:12px;
+border:1px solid #ccc;
+border-radius:8px;
+}
+
+button{
+padding:12px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+font-weight:bold;
+margin-top:5px;
+}
+
+.save-btn{
+background:#4267B2;
+color:white;
+width:100%;
+}
+
+.export-btn{
+background:#28a745;
+color:white;
+width:100%;
+margin-top:10px;
+}
+
+.search{
+margin-top:20px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
+}
+
+th,td{
+border:1px solid #ddd;
+padding:10px;
+text-align:left;
+}
+
+th{
+background:#4267B2;
+color:white;
+}
+
+.delete-btn{
+background:red;
+color:white;
+padding:6px 10px;
+}
+
+.status-active{
+color:green;
+font-weight:bold;
+}
+
+.status-notfound{
+color:red;
+font-weight:bold;
+}
+
+.status-unknown{
+color:orange;
+font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Account Link & UID Checker</h1>
+
+<div class="form-group">
+<input type="text" id="name" placeholder="Profile Name">
+</div>
+
+<div class="form-group">
+<select id="platform">
+<option>Facebook</option>
+<option>Instagram</option>
+</select>
+</div>
+
+<div class="form-group">
+<input type="text" id="link" placeholder="Profile Link">
+</div>
+
+<div class="form-group">
+<select id="status">
+<option>Unknown</option>
+<option>Active</option>
+<option>Not Found</option>
+</select>
+</div>
+
+<button class="save-btn" onclick="saveProfile()">
+Save Profile
+</button>
+
+<button class="export-btn" onclick="exportCSV()">
+Export CSV
+</button>
+
+<input class="search"
+type="text"
+id="search"
+placeholder="Search profile..."
+onkeyup="renderProfiles()">
+
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Platform</th>
+<th>Link</th>
+<th>Status</th>
+<th>Date</th>
+<th>Action</th>
+</tr>
+</thead>
+
+<tbody id="profileTable">
+</tbody>
+
+</table>
+
+</div>
+
+<script>
+
+let profiles =
+JSON.parse(localStorage.getItem("profiles")) || [];
+
+function saveProfile(){
+
+const name =
+document.getElementById("name").value;
+
+const platform =
+document.getElementById("platform").value;
+
+const link =
+document.getElementById("link").value;
+
+const status =
+document.getElementById("status").value;
+
+if(!name || !link){
+alert("Please fill all fields");
+return;
+}
+
+profiles.push({
+name,
+platform,
+link,
+status,
+date:new Date().toLocaleString()
+});
+
+localStorage.setItem(
+"profiles",
+JSON.stringify(profiles)
+);
+
+document.getElementById("name").value="";
+document.getElementById("link").value="";
+
+renderProfiles();
+
+}
+
+function renderProfiles(){
+
+const search =
+document.getElementById("search")
+.value.toLowerCase();
+
+const table =
+document.getElementById("profileTable");
+
+table.innerHTML="";
+
+profiles
+.filter(p =>
+p.name.toLowerCase().includes(search) ||
+p.link.toLowerCase().includes(search)
+)
+.forEach((p,index)=>{
+
+let statusClass="status-unknown";
+
+if(p.status==="Active")
+statusClass="status-active";
+
+if(p.status==="Not Found")
+statusClass="status-notfound";
+
+table.innerHTML += `
+<tr>
+<td>${p.name}</td>
+<td>${p.platform}</td>
+<td>
+<a href="${p.link}"
+target="_blank">
+Open
+</a>
+</td>
+<td class="${statusClass}">
+${p.status}
+</td>
+<td>${p.date}</td>
+<td>
+<button
+class="delete-btn"
+onclick="deleteProfile(${index})">
+Delete
+</button>
+</td>
+</tr>
+`;
+});
+
+}
+
+function deleteProfile(index){
+
+if(confirm("Delete profile?")){
+
+profiles.splice(index,1);
+
+localStorage.setItem(
+"profiles",
+JSON.stringify(profiles)
+);
+
+renderProfiles();
+
+}
+
+}
+
+function exportCSV(){
+
+let csv =
+"Name,Platform,Link,Status,Date\n";
+
+profiles.forEach(p=>{
+
+csv +=
+`${p.name},${p.platform},${p.link},${p.status},${p.date}\n`;
+
+});
+
+const blob =
+new Blob([csv],
+{type:"text/csv"});
+
+const url =
+window.URL.createObjectURL(blob);
+
+const a =
+document.createElement("a");
+
+a.href=url;
+a.download="profiles.csv";
+a.click();
+
+}
+
+renderProfiles();
+
+</script>
+
+</body>
+</html>
